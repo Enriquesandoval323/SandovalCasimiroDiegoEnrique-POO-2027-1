@@ -7,6 +7,10 @@
       <sourceFolder url="file://$MODULE_DIR$/POO/Practica_3" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/POO/Practica_4-8" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/POO/Actividad_Programacion_Gitbash/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/POO/Entregables_Practica7/Herencia_Basica" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/POO/Entregables_Practica7/Sobreescritura" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/POO/Entregables_Practica7/SuperOverride" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/POO/Entregables_Practica7/instanceof" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
