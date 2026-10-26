@@ -1,25 +1,25 @@
 /*
-De La Cruz Garcia Juan 
-Copado Hernandez Luis 
+De La Cruz Garcia Juan
+Copado Hernandez Luis
 Rivera Hernandez Luis
 Sandoval Casimiro Diego
 
-en esta parte del codigo es donde vamos a definir a la clase del Bibliotecario, la cual, asi como lo hizo usuario, le 
-vamos a definir atributos propios, como tambien va a recibir mediante la herencia, los atributos/constructores de la clase 
-Persona 
+En esta parte del codigo es donde vamos a definir a la clase del Bibliotecario, la cual, asi como lo hizo usuario, le
+vamos a definir atributos propios, como tambien va a recibir mediante la herencia, los atributos/constructores de la clase
+Persona
 */
 
 /*
 en esta parte vamos a declarar los atributos que va a usar Bibliotecario, asi como lo hicimos en la clase Usuario, vamos
-a declarar en privado todos los atributo, debido a que, como es una clase hija, no va a ser necesario que estos se 
-"hereden" a otras clases 
+a declarar en privado todos los atributo, debido a que, como es una clase hija, no va a ser necesario que estos se
+"hereden" a otras clases
 */
 public class Bibliotecario extends Persona{
     private String turno;
     private double salario;
-    
-        // declaracion de Setters
-        
+
+    // Declaracion de Setters
+
     public void setTurno(String turno){
         this.turno=turno;
     }
@@ -27,30 +27,30 @@ public class Bibliotecario extends Persona{
     public void setSalario(double salario){
         this.salario=salario;
     }
-        //declaracion de Getters 
+    //Declaracion de Getters
     public String getTurno(){
         return turno;
     }
-    
+
     public double getSalario(){
         return salario;
     }
-        //declaracion de constructores
-    // en esta parte vamos a hacer uso de la palabra reservada super, la cual, vamos a utilizar para poder tomar los constructores 
-    // que declaramos en la clase persona 
+    // Declaracion de constructores
+    // En esta parte vamos a hacer uso de la palabra reservada super, la cual, vamos a utilizar para poder tomar los constructores que declaramos en la clase persona
+    // Declaracion del constructor vacio
     public Bibliotecario(){
         super();
         this.turno=turno;
         this.salario=0;
     }
-    
+    // Declaracion del constructor completo (lleno)
     public Bibliotecario(int id, String nombre, String correo, String turno, double salario){
         super (id, nombre, correo);
         this.turno=turno;
         this.salario=0;
     }
-    //Aqui lo usamos para poder sobreescribir la informacion que vayamos agregando, mas que nada esto se usara mas adelante 
-    //pero se debe de usar de manera obligatoria, por ser la clase hija 
+    //Aqui lo usamos para poder sobreescribir la informacion que vayamos agregando, mas que nada esto se usara mas adelante
+    //pero se debe de usar de manera obligatoria, por ser la clase hija
     @Override
     public void mostrarInformacion(){
         System.out.println("ID: "+ id);
@@ -59,5 +59,5 @@ public class Bibliotecario extends Persona{
         System.out.println("Turno del empleado " + turno);
         System.out.println("Salario del empelado " + salario);
     }
-   
+
 }

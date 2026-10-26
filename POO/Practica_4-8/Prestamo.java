@@ -42,6 +42,14 @@ public class Prestamo {
         return activo;
     }
 
+    public Libro getLibro() {
+        return libro;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
     // Constructor vacío por defecto
     public Prestamo() {}
 
@@ -52,6 +60,12 @@ public class Prestamo {
         this.fechaPrestamo = fechaPrestamo;
         this.fechaDevolucion = fechaDevolucion;
         this.activo = activo;
+    }
+
+    public Prestamo(Usuario usuario, Libro libro) {
+        this.usuario = usuario;
+        this.libro = libro;
+        this.activo = true;
     }
 
     // Método para iniciar el préstamo

@@ -1,6 +1,6 @@
 /*
-De La Cruz Garcia Juan 
-Copado Hernandez Luis 
+De La Cruz Garcia Juan
+Copado Hernandez Luis
 Rivera Hernandez Luis
 Sandoval Casimiro Diego
 
@@ -14,27 +14,27 @@ public class Usuario extends Persona {
     private int librosPrestados;
     private String numeroCelular;
     private boolean activo;
-    // metodos setters 
+    // metodos setters
     public void setlibrosPrestados(int librosPrestados){
         this.librosPrestados=librosPrestados;
     }
-    
-     public void setnumeroCelular (String numeroCelular){
+
+    public void setnumeroCelular (String numeroCelular){
         this.numeroCelular=numeroCelular;
     }
-    
-     public void setActivo (boolean activo){
+
+    public void setActivo (boolean activo){
         this.activo=activo;
     }
-    
+
     public int getlibrosPrestados(){
         return librosPrestados;
     }
-    //metodos getters 
+    //metodos getters
     public String getnumeroCelular(){
         return numeroCelular;
     }
-    
+
     public boolean getActivo (){
         return activo;
     }
@@ -44,16 +44,16 @@ public class Usuario extends Persona {
         this.librosPrestados=0;
         this.activo=true;
     }
-    
+
     public Usuario(int id, String nombre, String correo, String numeroCelular){
         super(id, nombre, correo);
         this.numeroCelular=numeroCelular;
         this.librosPrestados=0;
         this.activo=true;
-        
+
     }
-    //Aqui lo usamos para poder sobreescribir la informacion que vayamos agregando, mas que nada esto se usara mas adelante 
-    //pero se debe de usar de manera obligatoria, por ser la clase hija 
+    //Aqui lo usamos para poder sobreescribir la informacion que vayamos agregando, mas que nada esto se usara mas adelante
+    //pero se debe de usar de manera obligatoria, por ser la clase hija
     @Override
     public void mostrarInformacion(){
         System.out.println("ID: "+ id);
