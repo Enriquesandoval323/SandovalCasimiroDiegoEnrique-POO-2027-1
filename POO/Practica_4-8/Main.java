@@ -26,7 +26,8 @@ public class Main {
             System.out.println("5. Realizar Préstamo de Libro");
             System.out.println("6. Realizar la devolución del libro");
             System.out.println("7. Eliminar Libro del Catálogo");
-            System.out.println("8. Salir");
+            System.out.println("8. Mostrar Préstamos");
+            System.out.println("9. Salir");
             System.out.print("Seleccione una opcion: ");
 
             // Validación a prueba de errores si ingresan letras en lugar de números
@@ -62,10 +63,15 @@ public class Main {
                             System.out.println("El año debe ser un número entero. Inténtalo de nuevo.");
                         }
                     }
-                    // Se crea un nuevo objeto llamado libro, con todos los datos que se proporcionaron
-                    Libro nuevoLibro = new Libro(isbn, autor, titulo, anio);
-                    miBiblioteca.agregarLibro(nuevoLibro);
-                    System.out.println("¡Libro registrado con éxito!");
+                    // Verificamos que ese ISBN no este registrado para evitar libros repetidos
+                    if(miBiblioteca.buscarLibro(isbn)!=null){
+                        System.out.println("Ya existe un libro con ese ISBN.");
+                    } else {
+                        // Se crea un nuevo objeto llamado libro, con todos los datos que se proporcionaron
+                        Libro nuevoLibro = new Libro(isbn, titulo, autor, anio);
+                        miBiblioteca.agregarLibro(nuevoLibro);
+                        System.out.println("¡Libro registrado con éxito!");
+                    }
                     break;
 
                 case 2:
@@ -91,10 +97,14 @@ public class Main {
                     System.out.print("Ingresa el Teléfono celular: ");
                     String telefono = scanner.nextLine();
 
-                    // Se crea un objeto llamado Usuario
-                    Usuario nuevoUsuario = new Usuario(idUsuario, nombre, correo, telefono);
-                    miBiblioteca.registrarUsuario(nuevoUsuario);
-                    System.out.println("¡Usuario registrado con éxito!");
+                    // Se crea el usuario solo si el ID no esta registrado
+                    if(miBiblioteca.buscarUsuario(idUsuario)!=null){
+                        System.out.println("Ya existe un usuario con ese ID.");
+                    } else {
+                        Usuario nuevoUsuario = new Usuario(idUsuario, nombre, correo, telefono);
+                        miBiblioteca.registrarUsuario(nuevoUsuario);
+                        System.out.println("¡Usuario registrado con éxito!");
+                    }
                     break;
 
                 case 3:
@@ -169,8 +179,7 @@ public class Main {
                         }
                         Usuario usuarioDevolver = miBiblioteca.buscarUsuario(idUsuarioDev);
                         if (usuarioDevolver != null) {
-                            // Creamos el objeto préstamo temporal para procesar la devolución en la biblioteca
-                            Prestamo prestamoTemporal = new Prestamo(usuarioDevolver, libroDevolver);
+                            // Se busca el prestamo que ya se habia guardado, sin crear otro
                             miBiblioteca.devolverLibroPrestamo(isbnDevolucion, idUsuarioDev);
                         } else {
                             System.out.println("Usuario no encontrado.");
@@ -187,22 +196,30 @@ public class Main {
 
                     // Verificamos si el libro existe antes de borrarlo
                     Libro libroAEliminar = miBiblioteca.buscarLibro(isbnEliminar);
-                    if (libroAEliminar != null) {
-                        miBiblioteca.eliminarLibro(isbnEliminar);
-                        System.out.println("¡Libro eliminado del catálogo con éxito!");
+                    if(libroAEliminar!=null){
+                        if(!libroAEliminar.estaDisponible()){
+                            System.out.println("No se puede eliminar un libro que esta prestado.");
+                        } else {
+                            miBiblioteca.eliminarLibro(isbnEliminar);
+                            System.out.println("¡Libro eliminado del catálogo con éxito!");
+                        }
                     } else {
                         System.out.println("No se encontró ningún libro con ese ISBN.");
                     }
                     break;
                 case 8:
+                    // Nueva opcion para ver todos los prestamos y su estado
+                    miBiblioteca.mostrarPrestamos();
+                    break;
+                case 9:
                     System.out.println("Saliendo del programa");
                     break;
                 // En caso de que no se seleccione una opcion valida
                 default:
-                    System.out.println("Opción inválida. Elige un número del 1 al 7.");
+                    System.out.println("Opción inválida. Elige un número del 1 al 9.");
             }
 
-        } while (opcion != 8);
+        } while (opcion != 9);
 
         scanner.close();
     }

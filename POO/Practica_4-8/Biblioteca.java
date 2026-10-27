@@ -18,54 +18,87 @@ public class Biblioteca {
     private ArrayList<Prestamo> prestamos;
 
     // Constructor: Inicializa las listas vacías al crear la biblioteca
-    public Biblioteca() {
-        this.libros = new ArrayList<>();
-        this.usuarios = new ArrayList<>();
-        this.empleados = new ArrayList<>();
-        this.prestamos = new ArrayList<>();
+    public Biblioteca(){
+        this.libros=new ArrayList<>();
+        this.usuarios=new ArrayList<>();
+        this.empleados=new ArrayList<>();
+        this.prestamos=new ArrayList<>();
     }
 
-    // Gestión de Libros
+    // Gestion de Libros
 
     // Agrega un libro nuevo al final de la lista
-    public void agregarLibro(Libro libro) {
-        libros.add(libro);
+    public void agregarLibro(Libro libro){
+        if(libro!=null){
+            // Verificamos que no haya otro libro con el mismo ISBN
+            if(libro.getIsbn()!=null && buscarLibro(libro.getIsbn())!=null){
+                System.out.println("Ya existe un libro con ese ISBN.");
+                return;
+            }
+            libros.add(libro);
+        }
     }
 
-    // Elimina un libro buscando por su código ISBN
-    public void eliminarLibro(String isbn) {
-        libros.removeIf(l -> l.getIsbn().equals(isbn));
+    // Elimina un libro buscando por su codigo ISBN
+    public void eliminarLibro(String isbn){
+        Libro libro=buscarLibro(isbn);
+        if(libro==null){
+            System.out.println("No se encontro un libro con ese ISBN.");
+        } else if(!libro.estaDisponible()){
+            System.out.println("No se puede eliminar un libro que esta prestado.");
+        } else {
+            libros.remove(libro);
+        }
     }
 
     // Busca y devuelve un libro usando su ISBN (retorna null si no lo encuentra)
-    public Libro buscarLibro(String isbn) {
-        for (Libro l : libros) {
-            if (l.getIsbn().equals(isbn)) {
+    public Libro buscarLibro(String isbn){
+        if(isbn==null){
+            return null;
+        }
+        for(Libro l : libros){
+            if(isbn.equals(l.getIsbn())){
                 return l;
             }
         }
         return null;
     }
 
-    // Muestra todos los libros del catálogo y su disponibilidad
-    public void mostrarCatalogo() {
+    // Ejemplo de sobrecarga que aparece en las instrucciones
+    public Libro buscarLibro(String titulo, String autor){
+        for(Libro l : libros){
+            if(titulo!=null && autor!=null && titulo.equals(l.getTitulo()) && autor.equals(l.getAutor())){
+                return l;
+            }
+        }
+        return null;
+    }
+
+    // Muestra todos los libros del catalogo y su disponibilidad
+    public void mostrarCatalogo(){
         System.out.println("CATÁLOGO DE LIBROS");
-        for (Libro l : libros) {
+        for(Libro l : libros){
             System.out.println(l + " | Disponible: " + l.estaDisponible());
         }
     }
 
-    // Gestión de Usuarios
+    // Gestion de Usuarios
 
     // Registra un nuevo usuario en la lista
-    public void registrarUsuario(Usuario usuario) {
-        usuarios.add(usuario);
+    public void registrarUsuario(Usuario usuario){
+        if(usuario!=null){
+            if(buscarUsuario(usuario.getId())!=null){
+                System.out.println("Ya existe un usuario con ese ID.");
+                return;
+            }
+            usuarios.add(usuario);
+        }
     }
 
-    // Busca un usuario usando su ID numérico
-    public Usuario buscarUsuario(int id) {
-        for (Usuario u : usuarios) {
-            if (u.getId() == id) {
+    // Busca un usuario usando su ID numerico
+    public Usuario buscarUsuario(int id){
+        for(Usuario u : usuarios){
+            if(u.getId()==id){
                 return u;
             }
         }
@@ -73,44 +106,99 @@ public class Biblioteca {
     }
 
     // Muestra la lista de todos los usuarios registrados
-    public void mostrarUsuarios() {
+    public void mostrarUsuarios(){
         System.out.println("LISTA DE USUARIOS");
-        for (Usuario u : usuarios) {
+        for(Usuario u : usuarios){
             u.mostrarInformacion();
         }
     }
 
-    // --- Gestión de Préstamos ---
-
-    // Realiza un préstamo si el libro está disponible
-    public void realizarPrestamo(Usuario usuario, Libro libro, String fechaPrestamo, String fechaDevolucion) {
-        // Verifica si el libro se puede prestar
-        if (libro.estaDisponible()) {
-            libro.prestar(); // Marca el libro como prestado
-            usuario.setlibrosPrestados(usuario.getlibrosPrestados() + 1); // Suma un libro al usuario
-
-            // Crea el registro del préstamo con sus fechas y lo guarda en la lista
-            Prestamo nuevoPrestamo = new Prestamo(usuario, libro);
-            nuevoPrestamo.setFechaPrestamo(fechaPrestamo);
-            nuevoPrestamo.setFechaDevolucion(fechaDevolucion);
-            prestamos.add(nuevoPrestamo);
-
-            System.out.println("¡Préstamo realizado con éxito para " + usuario.getNombre() + "!");
-        } else {
-            System.out.println("Lo sentimos, el libro '" + libro.getTitulo() + "' no se encuentra disponible.");
+    // Gestion de Bibliotecarios
+    public void registrarBibliotecario(Bibliotecario empleado){
+        if(empleado!=null){
+            empleados.add(empleado);
         }
     }
-    public void devolverLibroPrestamo(String isbn, int idUsuario) {
-        // Buscar si existe un préstamo activo que coincida con el libro y el usuario
-        for (Prestamo p : prestamos) {
-            if (p.getLibro().getIsbn().equals(isbn) && p.getUsuario().getId() == idUsuario && p.estaActivo()) {
-                p.getLibro().devolver(); // El libro vuelve a estar disponible
-                p.getUsuario().setlibrosPrestados(p.getUsuario().getlibrosPrestados() - 1); // Se descuenta al usuario
-                p.finalizarPrestamo(); // El préstamo se marca como inactivo
-                System.out.println("¡Devolución registrada con éxito!");
+
+    public void mostrarBibliotecarios(){
+        System.out.println("LISTA DE BIBLIOTECARIOS");
+        for(Bibliotecario b : empleados){
+            b.mostrarInformacion();
+        }
+    }
+
+    // Gestion de Prestamos
+
+    // Firma de dos parametros que pide el profesor
+    public void realizarPrestamo(Usuario usuario, Libro libro){
+        realizarPrestamo(usuario, libro, null, null);
+    }
+
+    // Conservamos la sobrecarga con fechas que utilizamos desde Main
+    public void realizarPrestamo(Usuario usuario, Libro libro, String fechaPrestamo, String fechaDevolucion){
+        if(usuario==null || libro==null){
+            System.out.println("No se puede realizar el prestamo con estos datos.");
+            return;
+        }
+        if(buscarUsuario(usuario.getId())!=usuario || buscarLibro(libro.getIsbn())!=libro){
+            System.out.println("El usuario o el libro no estan registrados en esta biblioteca.");
+            return;
+        }
+        if(!usuario.getActivo()){
+            System.out.println("No se puede realizar el prestamo porque el usuario esta inactivo.");
+            return;
+        }
+        if(!libro.estaDisponible()){
+            System.out.println("Lo sentimos, el libro '" + libro.getTitulo() + "' no se encuentra disponible.");
+            return;
+        }
+
+        // Prestamo llama a Libro y Usuario, para no contar el prestamo dos veces
+        Prestamo nuevoPrestamo=new Prestamo(usuario, libro);
+        nuevoPrestamo.setFechaPrestamo(fechaPrestamo);
+        nuevoPrestamo.setFechaDevolucion(fechaDevolucion);
+        nuevoPrestamo.iniciarPrestamo();
+        if(nuevoPrestamo.estaActivo()){
+            prestamos.add(nuevoPrestamo);
+            System.out.println("¡Préstamo realizado con éxito para " + usuario.getNombre() + "!");
+        }
+    }
+
+    // Firma que pide el profesor para devolver un objeto Prestamo
+    public void devolverLibro(Prestamo prestamo){
+        if(prestamo!=null && prestamos.contains(prestamo) && prestamo.estaActivo()){
+            prestamo.finalizarPrestamo();
+            System.out.println("¡Devolución registrada con éxito!");
+        } else {
+            System.out.println("No se encontro un prestamo activo con esos datos.");
+        }
+    }
+
+    // Conservamos este metodo para devolver por ISBN e ID desde nuestro menu
+    public void devolverLibroPrestamo(String isbn, int idUsuario){
+        for(Prestamo p : prestamos){
+            if(p.getLibro()!=null && p.getUsuario()!=null && isbn!=null &&
+                    isbn.equals(p.getLibro().getIsbn()) && p.getUsuario().getId()==idUsuario && p.estaActivo()){
+                devolverLibro(p);
                 return;
             }
         }
         System.out.println("No se encontró un préstamo activo con esos datos.");
+    }
+
+    // Muestra todos los prestamos que se han registrado y su estado
+    public void mostrarPrestamos(){
+        System.out.println("LISTA DE PRESTAMOS");
+        if(prestamos.isEmpty()){
+            System.out.println("Todavia no hay prestamos registrados.");
+        }
+        for(Prestamo p : prestamos){
+            System.out.println("Usuario: " + p.getUsuario().getNombre());
+            System.out.println("Libro: " + p.getLibro().getTitulo());
+            System.out.println("Fecha de prestamo: " + p.getFechaPrestamo());
+            System.out.println("Fecha de devolucion: " + p.getFechaDevolucion());
+            System.out.println("Prestamo activo: " + p.estaActivo());
+            System.out.println("----------------------");
+        }
     }
 }

@@ -19,7 +19,6 @@ public class Bibliotecario extends Persona{
     private double salario;
 
     // Declaracion de Setters
-
     public void setTurno(String turno){
         this.turno=turno;
     }
@@ -27,7 +26,8 @@ public class Bibliotecario extends Persona{
     public void setSalario(double salario){
         this.salario=salario;
     }
-    //Declaracion de Getters
+
+    // Declaracion de Getters
     public String getTurno(){
         return turno;
     }
@@ -35,29 +35,70 @@ public class Bibliotecario extends Persona{
     public double getSalario(){
         return salario;
     }
-    // Declaracion de constructores
-    // En esta parte vamos a hacer uso de la palabra reservada super, la cual, vamos a utilizar para poder tomar los constructores que declaramos en la clase persona
-    // Declaracion del constructor vacio
+
+    // Declaracion de constructores, usamos super para tomar los atributos de Persona
     public Bibliotecario(){
         super();
-        this.turno=turno;
+        this.turno="Sin asignar";
         this.salario=0;
     }
-    // Declaracion del constructor completo (lleno)
+
     public Bibliotecario(int id, String nombre, String correo, String turno, double salario){
-        super (id, nombre, correo);
+        super(id, nombre, correo);
         this.turno=turno;
-        this.salario=0;
+        this.salario=salario;
     }
-    //Aqui lo usamos para poder sobreescribir la informacion que vayamos agregando, mas que nada esto se usara mas adelante
-    //pero se debe de usar de manera obligatoria, por ser la clase hija
+
+    // Estos son los tres metodos que pide el profesor para el bibliotecario
+    public void autorizarPrestamo(){
+        System.out.println("El bibliotecario "+ nombre +" autoriza el prestamo.");
+    }
+
+    public void registrarLibro(){
+        System.out.println("El bibliotecario "+ nombre +" registra un libro.");
+    }
+
+    public void eliminarLibro(){
+        System.out.println("El bibliotecario "+ nombre +" elimina un libro.");
+    }
+
+    // Sobrecargamos los metodos para que tambien puedan realizar las acciones en Biblioteca
+    public void autorizarPrestamo(Biblioteca biblioteca, Usuario usuario, Libro libro){
+        if(biblioteca!=null && usuario!=null && libro!=null && usuario.getActivo() && libro.estaDisponible()){
+            autorizarPrestamo();
+            biblioteca.realizarPrestamo(usuario, libro);
+        } else {
+            System.out.println("No se pudo autorizar el prestamo.");
+        }
+    }
+
+    public void registrarLibro(Biblioteca biblioteca, Libro libro){
+        if(biblioteca!=null && libro!=null){
+            if(libro.getIsbn()!=null && biblioteca.buscarLibro(libro.getIsbn())!=null){
+                System.out.println("Ya existe un libro con ese ISBN.");
+            } else {
+                biblioteca.agregarLibro(libro);
+                registrarLibro();
+            }
+        }
+    }
+
+    public void eliminarLibro(Biblioteca biblioteca, String isbn){
+        if(biblioteca!=null && biblioteca.buscarLibro(isbn)!=null){
+            biblioteca.eliminarLibro(isbn);
+            if(biblioteca.buscarLibro(isbn)==null){
+                eliminarLibro();
+            }
+        }
+    }
+
+    // Aqui usamos Override, ya que Persona tiene el metodo abstracto
     @Override
     public void mostrarInformacion(){
         System.out.println("ID: "+ id);
         System.out.println("Nombre " + nombre);
         System.out.println("Correo " + correo);
         System.out.println("Turno del empleado " + turno);
-        System.out.println("Salario del empelado " + salario);
+        System.out.println("Salario del empleado " + salario);
     }
-
 }
